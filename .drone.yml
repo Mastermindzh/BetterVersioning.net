@@ -1,0 +1,36 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: restore
+    image: mcr.microsoft.com/dotnet/sdk:7.0
+    commands:
+      - dotnet restore src/*.csproj
+
+  - name: build
+    image: mcr.microsoft.com/dotnet/sdk:7.0
+    commands:
+      - dotnet build src/*.csproj
+
+  - name: pack
+    image: mcr.microsoft.com/dotnet/sdk:7.0
+    commands:
+      - dotnet pack --configuration RELEASE --output dist src/*.csproj
+
+  - name: publish
+    image: mcr.microsoft.com/dotnet/sdk:7.0
+    environment:
+      NUGET_SOURCE:
+        from_secret: nuget_source
+      NUGET_KEY:
+        from_secret: nuget_key
+    commands:
+      - dotnet nuget push dist/*.nupkg --api-key $NUGET_KEY --source $NUGET_SOURCE
+
+    when:
+      branch:
+        - main
+        - master
+      event:
+        - push

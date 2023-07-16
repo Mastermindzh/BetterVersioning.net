@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>BetterVersioning.net</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>Rick, mastermindzh, van Lieshout &lt;info@rickvanlieshout.com&gt;</Authors>
     <IsPackable>true</IsPackable>
     <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
+    <None Include="../README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>

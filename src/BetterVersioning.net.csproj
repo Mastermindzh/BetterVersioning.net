@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>BetterVersioning.net</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>Rick, mastermindzh, van Lieshout &lt;info@rickvanlieshout.com&gt;</Authors>
     <IsPackable>true</IsPackable>
     <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
@@ -11,6 +11,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <DefaultItemExcludes>$(DefaultItemExcludes);example/*</DefaultItemExcludes>
   </PropertyGroup>
 

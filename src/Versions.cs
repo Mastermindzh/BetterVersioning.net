@@ -64,11 +64,17 @@ internal class Versions
     /// Currently just returns the latest version
     /// </remarks>
     /// <returns>array with a single element, the currentVersion</returns>
-    internal IEnumerable<ApiVersion> GetSupportedVersions(ApiVersion? from, ApiVersion? until)
+    private IEnumerable<ApiVersion> GetSupportedVersions(ApiVersion? from, ApiVersion? until)
     {
-        if (until is not null && (from >= until))
+        if (until is not null)
         {
-            throw new InvalidOperationException($"The from value ({from}) has to be bigger than the until version ({until})");
+            switch (options.UntilInclusive)
+            {
+                case true when from > until:
+                    throw new InvalidOperationException($"The from value ({from}) has to be bigger than or equal to the until version ({until})");
+                case false when from >= until:
+                    throw new InvalidOperationException($"The from value ({from}) has to be bigger than the until version ({until})");
+            }
         }
 
         var versionQuery = versions

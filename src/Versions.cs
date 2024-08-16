@@ -71,9 +71,9 @@ internal class Versions
             switch (options.UntilInclusive)
             {
                 case true when from > until:
-                    throw new InvalidOperationException($"The from value ({from}) has to be bigger than or equal to the until version ({until})");
+                    throw new InvalidOperationException($"The from value ({from}) has to be smaller than or equal to the until version ({until})");
                 case false when from >= until:
-                    throw new InvalidOperationException($"The from value ({from}) has to be bigger than the until version ({until})");
+                    throw new InvalidOperationException($"The from value ({from}) has to be smaller than the until version ({until})");
             }
         }
 

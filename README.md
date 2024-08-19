@@ -71,7 +71,7 @@ The main reasons I initially came up with this versioning idea are:
         };
 
         // Add the convention
-        opt.Conventions = new BetterVersioningConventionBuilder(versions);
+        opt.Conventions = new BetterVersioningConventionBuilder(versions, new BetterVersioningOptions() { UntilInclusive = true });
     });
     ```
 
@@ -118,7 +118,7 @@ Each object is constructed with 3 main parameters:
 | Name           | Type    | Description                                                                            |
 | -------------- | ------- | -------------------------------------------------------------------------------------- |
 | MajorVersion | ushort | The major version for this version |
-| MinorVersions | array of ushorts | The minor versions you want included in this version |
+| MinorVersions | array of ushort | The minor versions you want included in this version |
 | Supported | boolean | Whether the version is still supported (false would mean deprecated) |
 
 All unsupported (/deprecated) versions are still usable but will get the deprecation message (if set up in OpenApi) applied.  

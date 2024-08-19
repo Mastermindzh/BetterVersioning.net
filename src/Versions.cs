@@ -49,7 +49,7 @@ internal class Versions
     /// <returns></returns>
     internal IEnumerable<ApiVersion> GetDeprecatedVersions(ApiVersion? from, ApiVersion? until)
     {
-        ArgumentNullException.ThrowIfNull(from, nameof(from));
+        ArgumentNullException.ThrowIfNull(from);
 
         var versionQuery = versions
             .Where(version => version.Supported == false);
@@ -68,12 +68,13 @@ internal class Versions
     {
         if (until is not null)
         {
-            switch (options.UntilInclusive)
+            if (from > until)
             {
-                case true when from > until:
-                    throw new InvalidOperationException($"The from value ({from}) has to be smaller than or equal to the until version ({until})");
-                case false when from >= until:
-                    throw new InvalidOperationException($"The from value ({from}) has to be smaller than the until version ({until})");
+                throw new InvalidOperationException($"The from value ({from}) has to be smaller than or equal to the until version ({until})");
+            }
+            if (!options.UntilInclusive && from == until)
+            {
+                throw new InvalidOperationException($"The from value ({from}) can only be equal to the until version ({until}) if the `UntilInclusive` option is set.");
             }
         }
 
@@ -110,33 +111,5 @@ internal class Versions
         }
 
         return apiVersions;
-    }
-
-
-
-    /// <summary>
-    /// Applies the "version >= from" filter and, based on the options, also applies the until
-    /// </summary>
-    /// <param name="from"></param>
-    /// <param name="until"></param>
-    /// <param name="versionQuery"></param>
-    /// <returns></returns>
-    private IEnumerable<ApiVersion> OldApplyVersionFilters(ApiVersion? from, ApiVersion? until, ref IEnumerable<BetterVersion> versionQuery)
-    {
-        versionQuery = versionQuery.Where(version => version.MajorVersion >= from?.MajorVersion);
-
-        if (until is not null)
-        {
-            if (options.UntilInclusive)
-            {
-                versionQuery = versionQuery.Where(version => version.MajorVersion <= until.MajorVersion);
-            }
-            else
-            {
-                versionQuery = versionQuery.Where(version => version.MajorVersion < until.MajorVersion);
-            }
-        }
-
-        return versionQuery.ToApiVersions();
     }
 }

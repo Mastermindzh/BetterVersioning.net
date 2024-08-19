@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0]
+
+- Included the `DetectDuplicatesAtStartup` option which... will detect, and error out, if a duplicate caused by BetterVersioning.net is found at startup
+
 ## [1.0.4]
 
 - Fix GetSupportedVersions not using the UntilInclusive option.

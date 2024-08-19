@@ -130,3 +130,4 @@ When you add the convention you can (optionally) pass an options object that con
 | Name           | Type    | Description                                                                            |
 | -------------- | ------- | -------------------------------------------------------------------------------------- |
 | UntilInclusive | boolean | Whether the `[Until]` attribute is inclusive or exclusive of the given version number. |
+| DetectDuplicatesAtStartup | boolean | Whether BetterVersioning.net checks for, and errors out if, duplicates when it starts |

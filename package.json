@@ -1,6 +1,6 @@
 {
   "name": "BetterVersioning.net",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "src/BetterVersioning.net.csproj",
   "repository": "https://github.com/Mastermindzh/BetterVersioning.net",
   "author": "Rick van Lieshout <info@rickvanlieshout.com> (http://rickvanlieshout.com/)",

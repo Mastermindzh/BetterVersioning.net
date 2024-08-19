@@ -12,7 +12,7 @@ public class BetterVersionsController : ControllerBase
     [HttpGet]
     public string Get1() => "This endpoint was introduced in version 6";
 
-    [HttpGet, Until(6)]
+    [HttpGet("until-inclusive-test"), Until(6)]
     public string GetTest() => "This endpoint will only work with UntilInclusive = true";
 
     [HttpGet("minor-range")]

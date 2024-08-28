@@ -22,7 +22,7 @@ builder.Services.AddApiVersioning(opt =>
     var versions = new[] {
       new BetterVersion(1, supported: false),
       new BetterVersion(2, supported: false),
-      new BetterVersion(6, supported: false),
+      new BetterVersion(6, new ushort[]{1},supported: false),
       new BetterVersion(31, new ushort[]{1,2,3}, supported: false),
       new BetterVersion(32, new ushort[]{1}, supported: false),
       new BetterVersion(33, supported: false),

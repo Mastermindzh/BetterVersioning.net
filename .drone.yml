@@ -13,6 +13,11 @@ steps:
     commands:
       - dotnet build src/*.csproj
 
+  - name: test
+    image: mcr.microsoft.com/dotnet/sdk:7.0
+    commands:
+      - dotnet test Tests/Tests.csproj
+
   - name: pack
     image: mcr.microsoft.com/dotnet/sdk:7.0
     commands:
@@ -27,7 +32,6 @@ steps:
         from_secret: nuget_key
     commands:
       - dotnet nuget push dist/*.nupkg --api-key $NUGET_KEY --source $NUGET_SOURCE
-
     when:
       branch:
         - main

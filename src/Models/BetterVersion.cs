@@ -38,12 +38,12 @@ public record BetterVersion
         }
 
         MajorVersion = majorVersion;
+        Supported = supported ?? true;
 
         // Add version `x.0` as minor version because it is implied.
         MinorVersions = minorVersions is null
             ? new ushort[] { 0 }
-            : new ushort[] { 0 }.Intersect(minorVersions).ToArray();
-        Supported = supported ?? true;
+            : new ushort[] { 0 }.Union(minorVersions).ToArray();
     }
 
 }

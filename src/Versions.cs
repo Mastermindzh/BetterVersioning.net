@@ -1,32 +1,34 @@
 using Microsoft.AspNetCore.Mvc;
 
 using BetterVersioning.Net.Models;
-using BetterVersioning.Net.Extensions;
 
 namespace BetterVersioning;
 
 internal class Versions
 {
-    private readonly IEnumerable<BetterVersion> versions;
+    private readonly IEnumerable<ApiVersion> supportedVersions;
+    private readonly IEnumerable<ApiVersion> deprecatedVersions;
     private readonly BetterVersioningOptions options;
 
     internal Versions(IEnumerable<BetterVersion> versions, BetterVersioningOptions options)
     {
-        var allVersions = new List<ApiVersion>();
+        var supported = new List<ApiVersion>();
+        var deprecated = new List<ApiVersion>();
+        var majorVersions = new HashSet<ushort>();
 
         foreach (var version in versions)
         {
-            allVersions.Add(new ApiVersion(version.MajorVersion, 0));
-            if (version.MinorVersions is not null)
+            if (!majorVersions.Add(version.MajorVersion))
             {
-                foreach (var minorVersion in version.MinorVersions)
-                {
-                    allVersions.Add(new ApiVersion(version.MajorVersion, minorVersion));
-                }
+                throw new ArgumentException("Versions contains duplicate major versions", nameof(versions));
             }
+
+            var allVersions = version.Supported ? supported : deprecated;
+            allVersions.AddRange(version.MinorVersions.Select(minorVersion => new ApiVersion(version.MajorVersion, minorVersion)));
         }
 
-        this.versions = versions;
+        supportedVersions = supported;
+        deprecatedVersions = deprecated;
         this.options = options;
     }
 
@@ -38,6 +40,8 @@ internal class Versions
     /// <returns></returns>
     internal (IEnumerable<ApiVersion> supported, IEnumerable<ApiVersion> deprecated) GetVersions(ApiVersion? from, ApiVersion? until)
     {
+        ArgumentNullException.ThrowIfNull(from);
+
         return (GetSupportedVersions(from, until), GetDeprecatedVersions(from, until));
     }
 
@@ -47,14 +51,9 @@ internal class Versions
     /// <param name="from"></param>
     /// <param name="until"></param>
     /// <returns></returns>
-    internal IEnumerable<ApiVersion> GetDeprecatedVersions(ApiVersion? from, ApiVersion? until)
+    private IEnumerable<ApiVersion> GetDeprecatedVersions(ApiVersion from, ApiVersion? until)
     {
-        ArgumentNullException.ThrowIfNull(from);
-
-        var versionQuery = versions
-            .Where(version => version.Supported == false);
-
-        return ApplyVersionFilters(from, until, ref versionQuery);
+        return ApplyVersionFilters(from, until, deprecatedVersions);
     }
 
     /// <summary>
@@ -64,7 +63,7 @@ internal class Versions
     /// Currently just returns the latest version
     /// </remarks>
     /// <returns>array with a single element, the currentVersion</returns>
-    private IEnumerable<ApiVersion> GetSupportedVersions(ApiVersion? from, ApiVersion? until)
+    private IEnumerable<ApiVersion> GetSupportedVersions(ApiVersion from, ApiVersion? until)
     {
         if (until is not null)
         {
@@ -78,10 +77,7 @@ internal class Versions
             }
         }
 
-        var versionQuery = versions
-            .Where(version => version.Supported == true);
-
-        return ApplyVersionFilters(from, until, ref versionQuery);
+        return ApplyVersionFilters(from, until, supportedVersions);
 
     }
 
@@ -90,24 +86,17 @@ internal class Versions
     /// </summary>
     /// <param name="from"></param>
     /// <param name="until"></param>
-    /// <param name="versionQuery"></param>
+    /// <param name="apiVersions"></param>
     /// <returns></returns>
-    private IEnumerable<ApiVersion> ApplyVersionFilters(ApiVersion? from, ApiVersion? until, ref IEnumerable<BetterVersion> versionQuery)
+    private IEnumerable<ApiVersion> ApplyVersionFilters(ApiVersion from, ApiVersion? until, IEnumerable<ApiVersion> apiVersions)
     {
-        var apiVersions = versionQuery.ToApiVersions();
-
         apiVersions = apiVersions.Where(version => version >= from);
 
         if (until is not null)
         {
-            if (options.UntilInclusive)
-            {
-                apiVersions = apiVersions.Where(version => version <= until);
-            }
-            else
-            {
-                apiVersions = apiVersions.Where(version => version < until);
-            }
+            apiVersions = options.UntilInclusive
+                ? apiVersions.Where(version => version <= until)
+                : apiVersions.Where(version => version < until);
         }
 
         return apiVersions;

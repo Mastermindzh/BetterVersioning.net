@@ -23,8 +23,8 @@ internal class Versions
                 throw new ArgumentException("Versions contains duplicate major versions", nameof(versions));
             }
 
-            var allVersions = version.Supported ? supported : deprecated;
-            allVersions.AddRange(version.MinorVersions.Select(minorVersion => new ApiVersion(version.MajorVersion, minorVersion)));
+            var target = version.Supported ? supported : deprecated;
+            target.AddRange(version.MinorVersions.Select(minorVersion => new ApiVersion(version.MajorVersion, minorVersion)));
         }
 
         supportedVersions = supported;
@@ -33,70 +33,58 @@ internal class Versions
     }
 
     /// <summary>
-    /// Get a tuple with supported and deprecated versions
+    /// Get a tuple with supported and deprecated versions for the given range.
     /// </summary>
-    /// <param name="from">version to start at</param>
-    /// <param name="until">version to end at</param>
-    /// <returns></returns>
+    /// <param name="from">version to start at (inclusive), or <c>null</c> for no lower bound</param>
+    /// <param name="until">version to end at, or <c>null</c> for no upper bound</param>
     internal (IEnumerable<ApiVersion> supported, IEnumerable<ApiVersion> deprecated) GetVersions(ApiVersion? from, ApiVersion? until)
     {
-        ArgumentNullException.ThrowIfNull(from);
+        ValidateRange(from, until);
 
-        return (GetSupportedVersions(from, until), GetDeprecatedVersions(from, until));
+        return (
+            ApplyVersionFilters(from, until, supportedVersions),
+            ApplyVersionFilters(from, until, deprecatedVersions)
+        );
     }
 
     /// <summary>
-    /// Return all versions that are deprecated
+    /// Validates the range is coherent, honouring the <see cref="BetterVersioningOptions.UntilInclusive"/> option.
+    /// An unbounded (<c>null</c>) side is always valid.
     /// </summary>
-    /// <param name="from"></param>
-    /// <param name="until"></param>
-    /// <returns></returns>
-    private IEnumerable<ApiVersion> GetDeprecatedVersions(ApiVersion from, ApiVersion? until)
+    private void ValidateRange(ApiVersion? from, ApiVersion? until)
     {
-        return ApplyVersionFilters(from, until, deprecatedVersions);
-    }
-
-    /// <summary>
-    /// Returns all versions that are not deprecated
-    /// </summary>
-    /// <remarks>
-    /// Currently just returns the latest version
-    /// </remarks>
-    /// <returns>array with a single element, the currentVersion</returns>
-    private IEnumerable<ApiVersion> GetSupportedVersions(ApiVersion from, ApiVersion? until)
-    {
-        if (until is not null)
+        if (from is null || until is null)
         {
-            if (from > until)
-            {
-                throw new InvalidOperationException($"The from value ({from}) has to be smaller than or equal to the until version ({until})");
-            }
-            if (!options.UntilInclusive && from == until)
-            {
-                throw new InvalidOperationException($"The from value ({from}) can only be equal to the until version ({until}) if the `UntilInclusive` option is set.");
-            }
+            return;
         }
 
-        return ApplyVersionFilters(from, until, supportedVersions);
+        if (from > until)
+        {
+            throw new InvalidOperationException($"The from value ({from}) has to be smaller than or equal to the until version ({until})");
+        }
 
+        if (!options.UntilInclusive && from == until)
+        {
+            throw new InvalidOperationException($"The from value ({from}) can only be equal to the until version ({until}) if the `UntilInclusive` option is set.");
+        }
     }
 
     /// <summary>
-    /// Applies the "version >= from" filter and, based on the options, also applies the until
+    /// Applies the "version >= from" and "version &lt;= / &lt; until" filters based on the options.
+    /// A <c>null</c> bound is treated as unbounded on that side.
     /// </summary>
-    /// <param name="from"></param>
-    /// <param name="until"></param>
-    /// <param name="apiVersions"></param>
-    /// <returns></returns>
-    private IEnumerable<ApiVersion> ApplyVersionFilters(ApiVersion from, ApiVersion? until, IEnumerable<ApiVersion> apiVersions)
+    private IEnumerable<ApiVersion> ApplyVersionFilters(ApiVersion? from, ApiVersion? until, IEnumerable<ApiVersion> apiVersions)
     {
-        apiVersions = apiVersions.Where(version => version >= from);
+        if (from is ApiVersion fromVersion)
+        {
+            apiVersions = apiVersions.Where(version => version >= fromVersion);
+        }
 
-        if (until is not null)
+        if (until is ApiVersion untilVersion)
         {
             apiVersions = options.UntilInclusive
-                ? apiVersions.Where(version => version <= until)
-                : apiVersions.Where(version => version < until);
+                ? apiVersions.Where(version => version <= untilVersion)
+                : apiVersions.Where(version => version < untilVersion);
         }
 
         return apiVersions;

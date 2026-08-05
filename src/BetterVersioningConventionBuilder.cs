@@ -50,28 +50,28 @@ public class BetterVersioningConventionBuilder : ApiVersionConventionBuilder
     /// Detect duplicate routes caused by BetterVersioning.net
     /// </summary>
     /// <param name="controllerModel"></param>
-    /// <exception cref="InvalidOperationException"></exception> 
-    /// <summary></summary>
-    /// <param name="controllerModel"></param>
+    /// <exception cref="InvalidOperationException">Thrown when two endpoints share the same HTTP verb and route.</exception>
     private static void DetectDuplicates(ControllerModel controllerModel)
     {
-        // find and group all http methods by their template string (a.k.a route)
-        var groupedHttpMethods = controllerModel.Actions.SelectMany(static action =>
-            action.Attributes.Where(
-                attribute => attribute.GetType().IsSubclassOf(typeof(HttpMethodAttribute)))
-                .Cast<HttpMethodAttribute>()
-                .ToList()
-        ).GroupBy(methodAttribute => methodAttribute.Template);
+        var httpMethodAttributes = controllerModel.Actions
+            .SelectMany(static action => action.Attributes.OfType<HttpMethodAttribute>());
 
-        // Check whether duplicate strings are found, if not also check whether both `null` and "" are found
-        var duplicatesFound =
-            groupedHttpMethods.Any(group => group.Count() > 1) ||
-            groupedHttpMethods.Count(group => string.IsNullOrEmpty(group.Key)) > 1;
-
-        if (duplicatesFound)
+        if (HasDuplicateEndpoints(httpMethodAttributes))
         {
             throw new InvalidOperationException($"The ({controllerModel.ControllerName}) controller has duplicate endpoints");
         }
+    }
+
+    /// <summary>
+    /// Determines whether any two endpoints share the same HTTP verb(s) and route template.
+    /// A <c>null</c> and an empty template are treated as equal (both target the controller root).
+    /// </summary>
+    internal static bool HasDuplicateEndpoints(IEnumerable<HttpMethodAttribute> httpMethodAttributes)
+    {
+        return httpMethodAttributes
+            .GroupBy(attribute =>
+                $"{string.Join(",", attribute.HttpMethods.OrderBy(method => method, StringComparer.OrdinalIgnoreCase))}|{attribute.Template ?? string.Empty}")
+            .Any(group => group.Count() > 1);
     }
 
     /// <summary>
@@ -141,17 +141,23 @@ public class BetterVersioningConventionBuilder : ApiVersionConventionBuilder
     }
 
     /// <summary>
-    /// Validate that the until value passed is actually bigger or equal compared to the from version
+    /// Validate that the until value is greater than the from version, allowing equality when
+    /// <see cref="BetterVersioningOptions.UntilInclusive"/> is set. An unbounded (<c>null</c>) side is always valid.
     /// </summary>
     /// <param name="controllerModel"></param>
     /// <param name="from"></param>
     /// <param name="until"></param>
-    private static void ValidateUntilGreaterOrEqualThanFrom(ControllerModel controllerModel, ApiVersion? from,
+    private void ValidateUntilGreaterOrEqualThanFrom(ControllerModel controllerModel, ApiVersion? from,
     ApiVersion? until)
     {
-        if (until is not null && until <= from)
+        if (from is null || until is null)
         {
-            throw new InvalidOperationException($"The from value ({from}) has to be smaller or equal to the until version ({until}) on {controllerModel.ControllerType}");
+            return;
+        }
+
+        if (until < from || (!options.UntilInclusive && until == from))
+        {
+            throw new InvalidOperationException($"The until value ({until}) has to be greater than{(options.UntilInclusive ? " or equal to" : "")} the from version ({from}) on {controllerModel.ControllerType}");
         }
     }
 }

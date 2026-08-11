@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>BetterVersioning.net.Scalar</PackageId>
+    <Description>Scalar API reference integration for BetterVersioning.net OpenAPI documents.</Description>
+    <IsPackable>true</IsPackable>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="\" />
+    <PackageReference Include="Scalar.AspNetCore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../BetterVersioning.net.OpenApi/BetterVersioning.net.OpenApi.csproj" />
+  </ItemGroup>
+
+</Project>

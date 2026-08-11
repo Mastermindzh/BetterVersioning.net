@@ -1,0 +1,21 @@
+<Project>
+
+  <!--
+    Shared package metadata so all BetterVersioning.net packages stay lock-step.
+    The publish workflow overrides <Version> with the pushed git tag (-p:Version=<tag>).
+  -->
+  <PropertyGroup>
+    <Version>3.0.0</Version>
+    <Authors>Rick, mastermindzh, van Lieshout &lt;info@rickvanlieshout.com&gt;</Authors>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Mastermindzh/BetterVersioning.net</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Mastermindzh/BetterVersioning.net</PackageProjectUrl>
+  </PropertyGroup>
+
+  <!-- Every packable library exposes its internals to the test project. -->
+  <ItemGroup Condition="'$(IsPackable)' == 'true'">
+    <InternalsVisibleTo Include="Tests" />
+  </ItemGroup>
+
+</Project>

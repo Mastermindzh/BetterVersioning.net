@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>BetterVersioning.net.OpenApi</PackageId>
+    <Description>Microsoft OpenAPI document generation for BetterVersioning.net APIs.</Description>
+    <IsPackable>true</IsPackable>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="\" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Microsoft.OpenApi" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
+  </ItemGroup>
+
+  <!-- The Scalar package reuses this assembly's internal document deriver. -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="BetterVersioning.net.Scalar" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../BetterVersioning.net/BetterVersioning.net.csproj" />
+  </ItemGroup>
+
+</Project>

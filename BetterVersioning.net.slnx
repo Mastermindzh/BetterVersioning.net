@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/examples/" />
+  <Folder Name="/examples/OpenApiScalar/">
+    <Project Path="examples/OpenApiScalar/OpenApiScalar.Example.csproj" />
+  </Folder>
+  <Folder Name="/examples/OpenApiSwaggerUi/">
+    <Project Path="examples/OpenApiSwaggerUi/OpenApiSwaggerUi.Example.csproj" />
+  </Folder>
+  <Folder Name="/examples/Swashbuckle/">
+    <Project Path="examples/Swashbuckle/Swashbuckle.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/BetterVersioning.net.OpenApi/BetterVersioning.net.OpenApi.csproj" />
+    <Project Path="src/BetterVersioning.net.Scalar/BetterVersioning.net.Scalar.csproj" />
+    <Project Path="src/BetterVersioning.net.Swashbuckle/BetterVersioning.net.Swashbuckle.csproj" />
+    <Project Path="src/BetterVersioning.net/BetterVersioning.net.csproj" />
+  </Folder>
+  <Project Path="Tests.Integration/Tests.Integration.csproj" />
+  <Project Path="Tests/Tests.csproj" />
+</Solution>

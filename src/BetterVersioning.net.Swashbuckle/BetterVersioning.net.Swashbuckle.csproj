@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <PackageId>BetterVersioning.net.Swashbuckle</PackageId>
-    <Description>Swashbuckle document generation and Swagger UI integration for BetterVersioning.net APIs.</Description>
+    <Description>Swashbuckle document generation and Swagger UI integration for BetterVersioning.net
+      APIs.</Description>
     <IsPackable>true</IsPackable>
-    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>

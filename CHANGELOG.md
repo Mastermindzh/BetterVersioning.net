@@ -40,7 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support `[Until]`-only controllers/methods (no `[From]` required). Previously this threw at startup.
 - Honour the `UntilInclusive` option in the controller-level from/until validation, so `[From(x)]`/`[Until(x)]` on the same controller no longer errors when `UntilInclusive` is set.
 - Make duplicate-endpoint detection HTTP-verb aware, so the same route with different verbs (e.g. `GET` and `POST`) is no longer flagged as a duplicate.
-- Target `net8.0;net9.0;net10.0` (dropped end-of-life `net6.0`/`net7.0`).
+- Target `net9.0;net10.0` (dropped end-of-life `net6.0`/`net7.0`).
 
 ## [2.0.1]
 

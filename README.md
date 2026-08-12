@@ -190,7 +190,7 @@ app.UseSwaggerUI(ui =>
 ```
 
 > The Microsoft OpenAPI and Scalar packages target `net10.0`. The core and Swashbuckle
-> packages target `net8.0;net9.0;net10.0`.
+> packages target `net9.0;net10.0`.
 
 ## Defining versions
 

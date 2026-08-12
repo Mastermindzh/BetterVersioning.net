@@ -1,15 +1,15 @@
 {
   "name": "BetterVersioning.net",
-  "version": "2.1.0",
-  "main": "src/BetterVersioning.net.csproj",
+  "version": "3.0.0",
+  "main": "src/BetterVersioning.net/BetterVersioning.net.csproj",
   "repository": "https://github.com/Mastermindzh/BetterVersioning.net",
   "author": "Rick van Lieshout <info@rickvanlieshout.com> (http://rickvanlieshout.com/)",
   "license": "Apache-2.0",
   "private": false,
   "scripts": {
-    "build": "dotnet build src/BetterVersioning.net.csproj",
-    "test": "dotnet build src/BetterVersioning.net.csproj",
-    "pack": "dotnet pack --configuration release src/BetterVersioning.net.csproj",
+    "build": "dotnet build BetterVersioning.net.slnx",
+    "test": "dotnet test BetterVersioning.net.slnx",
+    "pack": "dotnet pack --configuration release src/BetterVersioning.net/BetterVersioning.net.csproj",
     "drone": "drone exec"
   }
 }

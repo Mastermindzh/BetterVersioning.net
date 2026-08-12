@@ -7,47 +7,148 @@
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/example/example.csproj",
+        "${workspaceFolder}/BetterVersioning.net.slnx",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
-      "problemMatcher": "$msCompile"
+      "problemMatcher": "$msCompile",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     },
     {
-      "label": "buildTests",
+      "label": "build-swashbuckle-example",
       "command": "dotnet",
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/Tests/Tests.csproj",
+        "${workspaceFolder}/examples/Swashbuckle/Swashbuckle.Example.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
       "problemMatcher": "$msCompile"
     },
     {
-      "label": "publish",
+      "label": "build-openapiscalar-example",
       "command": "dotnet",
       "type": "process",
       "args": [
-        "publish",
-        "${workspaceFolder}/example/example.csproj",
+        "build",
+        "${workspaceFolder}/examples/OpenApiScalar/OpenApiScalar.Example.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
       "problemMatcher": "$msCompile"
     },
     {
-      "label": "watch",
+      "label": "build-openapiswaggerui-example",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/examples/OpenApiSwaggerUi/OpenApiSwaggerUi.Example.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "run-swashbuckle-example",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "run",
+        "--project",
+        "${workspaceFolder}/examples/Swashbuckle/Swashbuckle.Example.csproj",
+        "--urls",
+        "http://localhost:5001"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "run-openapiscalar-example",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "run",
+        "--project",
+        "${workspaceFolder}/examples/OpenApiScalar/OpenApiScalar.Example.csproj",
+        "--urls",
+        "http://localhost:5002"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "run-openapiswaggerui-example",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "run",
+        "--project",
+        "${workspaceFolder}/examples/OpenApiSwaggerUi/OpenApiSwaggerUi.Example.csproj",
+        "--urls",
+        "http://localhost:5003"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "watch-swashbuckle-example",
       "command": "dotnet",
       "type": "process",
       "args": [
         "watch",
         "run",
         "--project",
-        "${workspaceFolder}/example/example.csproj"
+        "${workspaceFolder}/examples/Swashbuckle/Swashbuckle.Example.csproj",
+        "--urls",
+        "http://localhost:5001"
       ],
       "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "watch-openapiscalar-example",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "watch",
+        "run",
+        "--project",
+        "${workspaceFolder}/examples/OpenApiScalar/OpenApiScalar.Example.csproj",
+        "--urls",
+        "http://localhost:5002"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "watch-openapiswaggerui-example",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "watch",
+        "run",
+        "--project",
+        "${workspaceFolder}/examples/OpenApiSwaggerUi/OpenApiSwaggerUi.Example.csproj",
+        "--urls",
+        "http://localhost:5003"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "test",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "test",
+        "${workspaceFolder}/BetterVersioning.net.slnx",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
     }
   ]
 }

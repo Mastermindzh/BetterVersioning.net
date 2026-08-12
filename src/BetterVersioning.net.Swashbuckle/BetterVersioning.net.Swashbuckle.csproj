@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>BetterVersioning.net.Swashbuckle</PackageId>
+    <Description>Swashbuckle document generation and Swagger UI integration for BetterVersioning.net
+      APIs.</Description>
+    <IsPackable>true</IsPackable>
+    <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="\" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../BetterVersioning.net/BetterVersioning.net.csproj" />
+  </ItemGroup>
+
+</Project>

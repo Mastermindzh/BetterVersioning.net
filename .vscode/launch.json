@@ -2,29 +2,77 @@
   "version": "0.2.0",
   "configurations": [
     {
-      // Use IntelliSense to find out which attributes exist for C# debugging
-      // Use hover for the description of the existing attributes
-      // For further information visit https://github.com/dotnet/vscode-csharp/blob/main/debugger-launchjson.md
-      "name": ".NET Core Launch (web)",
+      "name": "Swashbuckle example (Swagger UI)",
       "type": "coreclr",
       "request": "launch",
-      "preLaunchTask": "build",
-      // If you have changed target frameworks, make sure to update the program path.
-      "program": "${workspaceFolder}/example/bin/Debug/net10.0/example.dll",
+      "preLaunchTask": "build-swashbuckle-example",
+      "program": "${workspaceFolder}/examples/Swashbuckle/bin/Debug/net10.0/Swashbuckle.Example.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/example",
+      "cwd": "${workspaceFolder}/examples/Swashbuckle",
       "stopAtEntry": false,
       "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5001"
       },
-      "sourceFileMap": {
-        "/Views": "${workspaceFolder}/Views"
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+        "uriFormat": "%s/swagger"
+      }
+    },
+    {
+      "name": "OpenAPI + Scalar example",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-openapiscalar-example",
+      "program": "${workspaceFolder}/examples/OpenApiScalar/bin/Debug/net10.0/OpenApiScalar.Example.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/examples/OpenApiScalar",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5002"
+      },
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+        "uriFormat": "%s/scalar"
+      }
+    },
+    {
+      "name": "OpenAPI + Swagger UI example",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-openapiswaggerui-example",
+      "program": "${workspaceFolder}/examples/OpenApiSwaggerUi/bin/Debug/net10.0/OpenApiSwaggerUi.Example.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/examples/OpenApiSwaggerUi",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5003"
+      },
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+        "uriFormat": "%s/swagger"
       }
     },
     {
       "name": ".NET Core Attach",
       "type": "coreclr",
       "request": "attach"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "All examples (Swagger UI + Scalar + Swagger-over-OpenAPI)",
+      "configurations": [
+        "Swashbuckle example (Swagger UI)",
+        "OpenAPI + Scalar example",
+        "OpenAPI + Swagger UI example"
+      ],
+      "stopAll": true
     }
   ]
 }

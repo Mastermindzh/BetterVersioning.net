@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
+    <!-- Swagger UI only; the OpenAPI documents come from Microsoft.AspNetCore.OpenApi. -->
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/BetterVersioning.net/BetterVersioning.net.csproj" />
+    <ProjectReference
+      Include="../../src/BetterVersioning.net.OpenApi/BetterVersioning.net.OpenApi.csproj" />
+  </ItemGroup>
+
+  <!-- Reuse the same versioned controllers as the other examples. -->
+  <ItemGroup>
+    <Compile Include="../Swashbuckle/Controllers/*.cs" LinkBase="Controllers" />
+  </ItemGroup>
+
+</Project>

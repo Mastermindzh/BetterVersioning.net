@@ -56,4 +56,15 @@ public class BetterVersionTests
             .And.Contain(0, "Zero should always be a minor version")
             .And.Contain(minorVersions, "All given minor versions should be added");
     }
+
+    [Fact]
+    public void MinorVersions_CannotBeMutatedAfterConstruction()
+    {
+        var betterVersion = new BetterVersion(1, [1, 2]);
+
+        var mutate = () => ((IList<ushort>)betterVersion.MinorVersions)[0] = 99;
+
+        mutate.Should().Throw<NotSupportedException>();
+        betterVersion.MinorVersions.Should().Equal(0, 1, 2);
+    }
 }
